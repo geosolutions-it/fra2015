@@ -18,6 +18,9 @@
 				<c:forEach items='${surveys}' var='survey' varStatus='rowItem'>
 					<c:set scope="page" var="countryIso3" value="${survey.country.iso3}" />
 					
+					<c:set scope="page" var="pendingFixEnabled" value="" />
+					<c:set scope="page" var="completeEnabled" value="" />
+					
 					<c:if test="${survey.status.status != 'underreview'}">
 						<c:set scope="page" var="pendingFixEnabled" value="disabled" />
 					</c:if>
