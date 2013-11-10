@@ -73,11 +73,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses />.
         <!-- ================================================================-->
 
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
         </dependency>

@@ -46,7 +46,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
+//import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 
 /** 
  * Interface RESTUserInterface.
@@ -63,7 +63,7 @@ public interface RESTUserService {
     @RolesAllowed({"ADMIN"})
     public User insert(
     		@Context SecurityContext sc, 
-    		@Multipart("user") User user) throws BadRequestServiceEx, NotFoundServiceEx;
+    		/*@Multipart("user")*/ User user) throws BadRequestServiceEx, NotFoundServiceEx;
 
     @PUT
     @Path("/user/{id}")
@@ -72,7 +72,7 @@ public interface RESTUserService {
     public long update(
     		@Context SecurityContext sc, 
     		@PathParam("id") long id,
-    		@Multipart("user") User user) throws NotFoundWebEx;
+    		/*@Multipart("user")*/ User user) throws NotFoundWebEx;
     
     @DELETE
     @Path("/user/{id}")

@@ -59,11 +59,6 @@
         <!--  Misc support libs -->
         <!-- ================================================================-->
 
-        <!-- needed for @Multipart -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
 
         <!-- needed for @RolesAllowed 
         <dependency>
