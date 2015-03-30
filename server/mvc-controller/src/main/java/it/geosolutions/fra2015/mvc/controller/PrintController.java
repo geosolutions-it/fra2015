@@ -31,6 +31,7 @@ import it.geosolutions.fra2015.server.model.survey.EntryItem;
 import it.geosolutions.fra2015.server.model.survey.Feedback;
 import it.geosolutions.fra2015.server.model.survey.NumberValue;
 import it.geosolutions.fra2015.server.model.survey.Question;
+import it.geosolutions.fra2015.server.model.survey.TextValue;
 import it.geosolutions.fra2015.server.model.user.User;
 import it.geosolutions.fra2015.services.BulkModelEntitiesLoader;
 import it.geosolutions.fra2015.services.FeedbackService;
@@ -364,10 +365,30 @@ public class PrintController {
 			outputwriter = new OutputStreamWriter(buffOs);  
 
 			Arrays.sort(countries);
-			
+
 			List<String> questionsHeader = new ArrayList<String>();
 			questionsHeader.add("Country");
 			List<EntryItem> all = bulkLoader.loadAllNumericValues(Arrays.asList(countries),questions);
+
+			int ei4Index = -1;
+			boolean customEi4Done = false;
+			boolean customEi13Done = false;
+			boolean customEi20Done = false;
+			//Find question before 13
+			Integer q13ToInsert = -1;
+			Integer q13IndexToInsert = 1;
+			Integer q20ToInsert = -1;
+			Integer q20IndexToInsert = 1;
+			for(Integer q : questions) {
+				if(q>13 && q13ToInsert==-1) {
+					q13ToInsert = q;
+				}
+				if(q>20 && q20ToInsert==-1) {
+					q20ToInsert = q;
+					break;
+				}
+			}
+
 			for(EntryItem nValue: all) {
 				EntryItem ei = nValue;
 				Entry e = ei.getEntry();
@@ -382,26 +403,91 @@ public class PrintController {
 						if(!questionsHeader.contains(h)) {
 							questionsHeader.add(h);
 						}
+					}	
+				}
+				if(nTable.equals("t4a") && !customEi4Done) {		
+					//Table 4b: add a single value having the sum for the values of the table
+					nQuestion = "q4";
+					nTable = "t4b";
+					String h = nQuestion+"-"+nTable+"-total";
+					ei4Index = questionsHeader.size();
+					List<EntryItem> ei4bEntryItems = bulkLoader.loadTable(questions,"4b");
+					if(ei4bEntryItems.size() > 0) {
+						questionsHeader.add(h);
+					}	
+
+					//Table 4c: add values
+					List<EntryItem> ei4cEntryItems = bulkLoader.loadTable(questions,"4c");;
+					nTable = "t4c";
+					for(EntryItem ei4cValue: ei4cEntryItems) {
+						String nRow = "r"+ei4cValue.getRowNumber();	
+						String nCol = "c"+ei4cValue.getColumnNumber();									
+						h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
+						questionsHeader.add(h);
 					}
+					customEi4Done = true;
+				}
+				/*Compute index for 13a and 20 */
+				if((q13ToInsert == -1 || q.getId().intValue() == q13ToInsert.intValue()) && !customEi13Done) {	
+					q13IndexToInsert = questionsHeader.size()-1;
+					customEi13Done = true;
+				}
+				if((q20ToInsert == -1 || q.getId().intValue() == q20ToInsert.intValue()) && !customEi20Done) {	
+					q20IndexToInsert = questionsHeader.size()-1;
+					customEi20Done = true;
 				}
 			}
+
+			//Table 13a: add the first two columns which contains numeric values
+			List<EntryItem> ei13aEntryItems = bulkLoader.loadTable(questions,"13a");;
+			String nTable = "t13a";
+			String nQuestion = "q13";
+			int count = 0;
+			for(EntryItem ei13aValue : ei13aEntryItems) {
+				if(ei13aValue.getColumnNumber()<=2) {
+					String nRow = "r"+ei13aValue.getRowNumber();
+					String nCol = "c"+ei13aValue.getColumnNumber();											
+					String h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
+					questionsHeader.add(q13IndexToInsert+count,h);
+					count++;
+				}
+			}
+
+			//Table 20: add values		
+			List<EntryItem> ei20EntryItems = bulkLoader.loadTable(questions,"20");
+			nQuestion = "q20";
+			nTable = "t20";
+			for(EntryItem ei20Value: ei20EntryItems) {
+				if(ei20Value.getColumnNumber()<=1 && ei20Value.getType().equals("Number")) {
+					String nRow = "r"+ei20Value.getRowNumber();	
+					String nCol = "c"+ei20Value.getColumnNumber();									
+					String h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
+					questionsHeader.add(q20IndexToInsert+count,h);
+					count++;
+				}
+			}
+
 			outputwriter.write(StringUtils.join(questionsHeader, CSV_SEPARATOR));
 			outputwriter.write(SystemUtils.LINE_SEPARATOR);
 
-			
+			List<NumberValue> numberValues;
 			for(String country : countries) {
 				String[] outputValues = new String[questionsHeader.size()];
 				Arrays.fill(outputValues, "N/A");
 				outputValues[0] = country;
-				List<NumberValue> numberValues = bulkLoader.loadAllNumericValuesWithQuestions(country,questions);
+				numberValues = bulkLoader.loadAllNumericValuesWithQuestions(country,questions);
+				//Table 4c: add values
+				numberValues.addAll(bulkLoader.loadTotalValue(country, questions, "4c"));
+				//Table 20: add values
+				numberValues.addAll(bulkLoader.loadTotalValue(country, questions, "20"));
 
 				for(int i = 0 ; i <numberValues.size() ; i++) {
 					NumberValue nValue = numberValues.get(i);
 					EntryItem ei = nValue.getEntryItem();
 					Entry e = ei.getEntry();
 					Question q = e.getQuestion();
-					String nQuestion = "q"+q.getId();
-					String nTable = "t"+e.getVariable();
+					nQuestion = "q"+q.getId();
+					nTable = "t"+e.getVariable();
 					String nRow = "r"+ei.getRowNumber();
 					String nCol = "y"+ei.getColumnName()+"_"+ei.getColumnNumber();
 					String h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
@@ -411,6 +497,53 @@ public class PrintController {
 							nValue.setContent("N/A");
 						}
 						outputValues[valueIndex] = StringEscapeUtils.escapeCsv(nValue.getContent());
+					}else {
+						nQuestion = "q"+q.getId();
+						nTable = "t"+e.getVariable();
+						nRow = "r"+ei.getRowNumber();	
+						nCol = "c"+ei.getColumnNumber();									
+						h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
+						valueIndex = questionsHeader.indexOf(h);
+						if ("NaN".equalsIgnoreCase(nValue.getContent())){
+							nValue.setContent("N/A");
+						}
+						outputValues[valueIndex] = StringEscapeUtils.escapeCsv(nValue.getContent());
+					}
+				}
+				if(ei4Index > 0) {
+					//Table 4b: add a single value having the sum for the values of the table
+					List<NumberValue> ei4bnv = bulkLoader.loadTotalValue(country, questions,"4b");
+					Double total = 0d;
+					Boolean valueNan = true;
+					for(NumberValue v : ei4bnv) {
+						if (!"NaN".equalsIgnoreCase(v.getContent())){
+							total = total + v.getValue().doubleValue();
+							valueNan = false;
+						}
+					}
+					if(valueNan) {
+						outputValues[ei4Index] = "NaN";
+					}else {
+						outputValues[ei4Index] = StringEscapeUtils.escapeCsv(String.format( "%,.2f", total ));
+					}
+				}
+				//Table 13a: add values
+				List<TextValue> txtValues = bulkLoader.loadTextValue(country, questions, "13a");
+				for(TextValue tv : txtValues) {
+					EntryItem ei = tv.getEntryItem();
+					Entry e = ei.getEntry();
+					Question q = e.getQuestion();
+					nQuestion = "q"+q.getId();
+					nTable = "t"+e.getVariable();
+					String nRow = "r"+ei.getRowNumber();	
+					String nCol = "c"+ei.getColumnNumber();									
+					String h = StringEscapeUtils.escapeCsv(nQuestion+"-"+nTable+"-"+nRow+"-"+nCol);
+					int valueIndex = questionsHeader.indexOf(h);
+					if(valueIndex > -1) {
+						if ("NaN".equalsIgnoreCase(tv.getContent())){
+							tv.setContent("N/A");
+						}
+						outputValues[valueIndex] = StringEscapeUtils.escapeCsv(tv.getContent());
 					}
 				}
 
