@@ -92,7 +92,7 @@
 -->
 							<!-- TO BE USED on fra2015 (once deployed and tested) -->
 							
-							<div style="text-align: right; padding-right: 5px;"><i>Release 20150227</i></div>
+							<div style="text-align: right; padding-right: 5px;"><i>Release 20150311</i></div>
 							
 						</div>
 					</div>
