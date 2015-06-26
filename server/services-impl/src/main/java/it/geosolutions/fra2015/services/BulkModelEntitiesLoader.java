@@ -180,4 +180,13 @@ public class BulkModelEntitiesLoader {
 		searchCriteria.addFilterEqual("entryItem.entry.question.id", questions);
 		return textNumberDAO.search(searchCriteria);
 	}
+	
+        public List<TextValue> loadTextNumericValues(String iso3, Integer questions) {
+    
+                Search searchCriteria = new Search();
+                searchCriteria.addFilterEqual("country.iso3", iso3);
+                searchCriteria.addFetch("entryItem.entry");
+                searchCriteria.addFilterEqual("entryItem.entry.question.id", questions);
+                return textValueDAO.search(searchCriteria);
+        }
 }
