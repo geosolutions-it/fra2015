@@ -546,7 +546,7 @@ public class SurveyServiceImpl implements SurveyService {
 					value.getContent());
 			values.add(compact);
 		}
-		List<TextValue> textValues = bulkLoader.loadAllTextValues(iso3);
+		List<TextValue> textValues = bulkLoader.loadTextNumericValues(iso3,questionNumber);
 		for (Value value : textValues) {
 			EntryItem item = value.getEntryItem();
 			CompactValue compact = new CompactValue(
