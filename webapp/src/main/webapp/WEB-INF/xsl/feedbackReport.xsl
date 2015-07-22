@@ -95,11 +95,6 @@
         <fo:block text-align="center" font-size="12pt" margin-top="10pt">
           <xsl:value-of select="//div[@id='userName']" /> feedback <xsl:value-of select="//div[@id='profileName']" /> summary on <xsl:value-of select="//div[@id='currentDate']" />
         </fo:block>
-      <fo:block text-align="center" margin-top="100pt">
-        <fo:external-graphic src="url('/img/faologo.png')"
-          width="50pt" height="50pt" content-width="scale-to-fit"
-          content-height="scale-to-fit" />
-      </fo:block>
       <fo:block text-align="center" font-size="24pt" font-weight="bold">
         Forestry Department
       </fo:block>
