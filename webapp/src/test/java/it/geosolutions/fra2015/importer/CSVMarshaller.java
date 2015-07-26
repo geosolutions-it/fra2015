@@ -41,13 +41,13 @@ import javax.xml.bind.Marshaller;
  * @author DamianoG
  * 
  */
-public class CSVImporterMarshaller {
+public class CSVMarshaller {
 
     private CSVParser csvParser;
     
     private OutputStream surveyOutStream;
 
-    public CSVImporterMarshaller(CSVParser converter, File outDirectory) throws FileNotFoundException {
+    public CSVMarshaller(CSVParser converter, File outDirectory) throws FileNotFoundException {
         if (converter == null) {
             throw new IllegalArgumentException("The passed csvParser is null!!!");
         }

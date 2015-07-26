@@ -21,7 +21,7 @@ package it.geosolutions.fra2015.importer.test;
 
 import static it.geosolutions.fra2015.importer.ReservedHeaderNames.YEAR;
 import it.geosolutions.fra2015.importer.CSVBasicValueCreator;
-import it.geosolutions.fra2015.importer.CSVImporterMarshaller;
+import it.geosolutions.fra2015.importer.CSVMarshaller;
 import it.geosolutions.fra2015.importer.CSVLoader;
 import it.geosolutions.fra2015.importer.CSVParser;
 import it.geosolutions.fra2015.importer.CSVBasicValueCreator.*;
@@ -243,7 +243,7 @@ public class SurveyCSV2surveyXMLsTest extends Assert {
                     "Output Directory doesn't exists, is not a dirtectory or it's not writable...");
         }
 
-        CSVImporterMarshaller marshaller = new CSVImporterMarshaller(csvParser, outputDir);
+        CSVMarshaller marshaller = new CSVMarshaller(csvParser, outputDir);
         marshaller.setSurveyOutStream(System.out);
         try {
             marshaller.marshall();
