@@ -79,6 +79,7 @@ public class CSVMarshaller {
         user.setRole("admin");
         user.setUsername("admin");
         List<UserDTO> users = new LinkedList<UserDTO>();
+        users.add(user);
         
         XmlSurvey survey = new XmlSurvey();
         survey.setInfo(si);

@@ -17,7 +17,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package it.geosolutions.fra2015.importer;
+package it.geosolutions.fra2015.starter;
+
+import it.geosolutions.fra2015.importer.CSVLoader;
+import it.geosolutions.fra2015.importer.CSVMarshaller;
+import it.geosolutions.fra2015.importer.CSVParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,7 +41,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.csv.CSVRecord;
-import org.geotools.TestData;
+
 
 /**
  * @author DamianoG
@@ -83,6 +87,7 @@ public class CSVImporter {
             else{
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp( "csvImporter", options );
+                return;
             }
             
             
@@ -91,22 +96,24 @@ public class CSVImporter {
             System.err.println("Parsing failed.  Reason: " + exp.getMessage());
         }
         
-//        System.out.println(csv1Value + " - " + csv2Value + " - " + outputDirectoryValue);
-        
         CSVLoader csv1Loader = new CSVLoader(csv1Value);
         CSVLoader csv2Loader = new CSVLoader(csv2Value);
-
-        List<CSVRecord> records1 = csv1Loader.groupCSVByCountry("DZA");
-        List<CSVRecord> records2 = csv2Loader.groupCSVByCountry("DZA");
-
-        Set<Map<String, Integer>> headers = new LinkedHashSet<Map<String, Integer>>();
-        headers.add(csv1Loader.getHeader());
-        headers.add(csv2Loader.getHeader());
-        CSVParser csvParser = new CSVParser("DZA", headers, records1, records2);
-        csvParser.setPrettyHeader(csv1Loader.getPrettyHeader(), csv2Loader.getPrettyHeader());
         
-        CSVMarshaller marhaller = new CSVMarshaller(csvParser, new File(outputDirectoryValue));
-        marhaller.marshall();
+        Set<String> countries = csv1Loader.getCountries();
+        
+        for(String country : countries){
+            List<CSVRecord> records1 = csv1Loader.groupCSVByCountry(country);
+            List<CSVRecord> records2 = csv2Loader.groupCSVByCountry(country);
+    
+            Set<Map<String, Integer>> headers = new LinkedHashSet<Map<String, Integer>>();
+            headers.add(csv1Loader.getHeader());
+            headers.add(csv2Loader.getHeader());
+            CSVParser csvParser = new CSVParser(country, headers, records1, records2);
+            csvParser.setPrettyHeader(csv1Loader.getPrettyHeader(), csv2Loader.getPrettyHeader());
+            
+            CSVMarshaller marhaller = new CSVMarshaller(csvParser, new File(outputDirectoryValue));
+            marhaller.marshall();
+        }
 
     }
 }

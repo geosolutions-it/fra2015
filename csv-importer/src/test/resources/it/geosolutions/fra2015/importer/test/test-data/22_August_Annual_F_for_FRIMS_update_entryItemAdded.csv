@@ -1,4 +1,4 @@
-Country,Year,4c_2_1,4c_2_2,8a_3*,8a_4*,16a_2*,16a_3*,16a_4*,16b_2*,16b_3*,16b_4*,21b_2_1
+Country,Year,4c_2_1,4c_2_2,8a_3,8a_4,16a_2,16a_3,16a_4,16b_2,16b_3,16b_4,21b_2_1
 Country,Year,Q4 table 4c,Q4 table 4c,Q8 table 8a,Q8 table 8a,Q16 table 16a,Q16 table 16a,Q16 table 16a,Q16 table 16b,Q16 table 16b,Q16 table 16b,Q21 table 21b
 Country,Year,WooRemov,WooFuel,BurnLan,BurnFor,FSCarea,PEFCarea,OthIntCertif,DomCertif1,DomCertif2,DomCertif3,ForConvArea
 ABW,1990,1.2,1.19,,,,,,,,,

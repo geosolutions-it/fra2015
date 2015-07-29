@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -88,18 +89,13 @@ public class CSVParser {
             Iterator<String> iter = header.keySet().iterator();
             while(iter.hasNext()){
                 String colName = iter.next();
-                // HEY THIS IS CRUCIAL!!! SHOULD WE USE isSet() OR isMapped() ??? See the related GITHUB ISSUE about XML IMPORT!!!
-                if(record.isMapped(colName)){
+                if(record.isSet(colName) && !StringUtils.isBlank(record.get(colName))){
                     if(!ReservedHeaderNames.isReserved(colName)){
-                        int questionNumber = extractQuestionName(prettyHeader.get(header.get(colName)));
-                        BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, record.get(colName), record.get(YEAR), questionNumber);
+                        BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, record.get(colName), record.get(YEAR), prettyHeader.get(header.get(colName)));
                         if(bv != null){
                             surveyValues.add(bv);
                         }
                     }
-                }
-                else{
-                    LOGGER.warn("that's strange, this colName: '" + colName + "' is not mapped");
                 }
             }
         }
@@ -177,13 +173,6 @@ public class CSVParser {
             return false;
         }
         return true;
-    }
-    
-    private int extractQuestionName(String value){
-        Pattern pattern = Pattern.compile("^Q(\\d*)");
-        Matcher matcher = pattern.matcher(value);
-        matcher.find();
-        return Integer.parseInt(matcher.group(1));
     }
     
     /**
