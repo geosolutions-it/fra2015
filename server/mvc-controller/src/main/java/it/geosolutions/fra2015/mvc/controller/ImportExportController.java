@@ -181,6 +181,7 @@ public class ImportExportController {
 
 	@RequestMapping(value = "/importXml", method = RequestMethod.POST)
 	public String importXml(ModelMap model, SurveyUpload uploadItem, BindingResult result) {
+	        LOGGER.info("Importing '" + uploadItem.getCountryForImport() + "'");
 		if (result.hasErrors()) {
 			for (ObjectError error : result.getAllErrors()) {
 
@@ -189,7 +190,7 @@ public class ImportExportController {
 			return "redirect:/adminexport";
 		}
 		if(uploadItem == null || uploadItem.getFileData() == null || uploadItem.getFileData().isEmpty() || StringUtils.isBlank(uploadItem.getCountryForImport())){
-
+		        LOGGER.error("ERROR NO country provided!!'" + uploadItem.getCountryForImport() + "'");
 			model.addAttribute("messageType", "warning");
 			model.addAttribute("messageCode", "import.resultKO");
 			model.addAttribute("messageTimeout",10000);
@@ -197,24 +198,24 @@ public class ImportExportController {
 		else{
 			Boolean outcome = importFromXML(uploadItem.getFileData(), uploadItem.getCountryForImport());
 			if(outcome == null){
-
+			        LOGGER.error("An ERROR occurred while importing survey for '" + uploadItem.getCountryForImport() + "'");
 				model.addAttribute("messageType", "warning");
 				model.addAttribute("messageCode", "import.resultKO");
 				model.addAttribute("messageTimeout",10000);
-			}
+			}    
 			else if(!outcome){
-
+			        LOGGER.error("An ERROR occurred while importing survey for '" + uploadItem.getCountryForImport() + "'");
 				model.addAttribute("messageType", "warning");
 				model.addAttribute("messageCode", "import.countrynotmatch");
 				model.addAttribute("messageTimeout",10000);
 			}
 			else{
+			        LOGGER.info("Survey import for '" + uploadItem.getCountryForImport() + "' ended SUCCESSFULLY!");
 				model.addAttribute("messageType", "success");
 				model.addAttribute("messageCode", "import.resultOK");
 				model.addAttribute("messageTimeout",10000);
 			}
 		}
-
 		model.addAttribute("countries", surveyService.getCountries());
 		model.addAttribute("uploadItem", new SurveyUpload());
 		model.addAttribute("context","export");

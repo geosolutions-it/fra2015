@@ -107,6 +107,17 @@
 							</EntryItems>
 							<variable>1</variable>
 						</entry>
+						<entry>
+							<type>textarea</type>
+							<EntryItems>
+								<entryItem>
+									<rowNumber>0</rowNumber>
+									<columnNumber>0</columnNumber>
+									<type>String</type>
+								</entryItem>
+							</EntryItems>
+							<variable>1000</variable>
+						</entry>
 					</entries>
 				</question>
 				<question>
