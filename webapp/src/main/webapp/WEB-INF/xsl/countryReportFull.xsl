@@ -264,19 +264,21 @@
   </xsl:template>
    
 	<xsl:template match="table">
-		<fo:table table-layout="fixed" width="100%" border-collapse="collapse"
-			border-spacing="2px" border="1px solid black" margin-bottom="10pt">
-			<xsl:choose>
-				<xsl:when test="@cols">
-					<xsl:call-template name="build-columns">
-						<xsl:with-param name="cols" select="concat(@cols, ' ')" />
-					</xsl:call-template>
-				</xsl:when>
-			</xsl:choose>
-			<fo:table-body>
-				<xsl:apply-templates select="*" />
-			</fo:table-body>
-		</fo:table>
+		<xsl:if test="count(.//td)>0">
+			<fo:table table-layout="fixed" width="100%" border-collapse="collapse"
+				border-spacing="2px" border="1px solid black" margin-bottom="10pt">
+				<xsl:choose>
+					<xsl:when test="@cols">
+						<xsl:call-template name="build-columns">
+							<xsl:with-param name="cols" select="concat(@cols, ' ')" />
+						</xsl:call-template>
+					</xsl:when>
+				</xsl:choose>
+				<fo:table-body>
+					<xsl:apply-templates select="*" />
+				</fo:table-body>
+			</fo:table>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="tr">
@@ -501,7 +503,9 @@
 			<xsl:apply-templates select="*|text()" />
 		</fo:inline>
 	</xsl:template>
-
+	
+	<xsl:template match="table//br">&#x0a;</xsl:template>
+	
 	<xsl:template match="br">
 		<fo:block>
 		</fo:block>
@@ -1328,5 +1332,8 @@
   </xsl:template>
  
   <xsl:template match='div[@id="cell-content" and not(text()) and not(descendant::text())]'>N/A</xsl:template> 
+  
+  <!-- Sometimes html pasted by the user in a free text entry has an accordion in the table body... we want remove it otherwise the print fails -->
+  <xsl:template match="caption"></xsl:template>
   
 </xsl:stylesheet>
