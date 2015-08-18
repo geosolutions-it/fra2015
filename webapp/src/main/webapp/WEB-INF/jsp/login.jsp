@@ -62,8 +62,8 @@
 												code="login.select" /></span>: <br/> <select
 										id="languageSelector" class="input-block-level" ONCHANGE="location = '?lang='+this.options[this.selectedIndex].value;">
 											<option value="en" ${pageContext.response.locale=='en'?'selected':''}>English</option>
-											<option value="fr" ${pageContext.response.locale=='fr'?'selected':''}>Français</option>
-											<option value="es" ${pageContext.response.locale=='es'?'selected':''}>Español</option>
+											<option value="fr" ${pageContext.response.locale=='fr'?'selected':''}>FranÃ§ais</option>
+											<option value="es" ${pageContext.response.locale=='es'?'selected':''}>EspaÃ±ol</option>
 									</select>
 									</label>
 
@@ -92,7 +92,7 @@
 -->
 							<!-- TO BE USED on fra2015 (once deployed and tested) -->
 							
-							<div style="text-align: right; padding-right: 5px;"><i>Release 20150311</i></div>
+							<div style="text-align: right; padding-right: 5px;"><i>Release 20150818</i></div>
 							
 						</div>
 					</div>
