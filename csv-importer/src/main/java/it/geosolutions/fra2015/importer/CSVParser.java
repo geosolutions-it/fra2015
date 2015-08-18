@@ -87,16 +87,23 @@ public class CSVParser {
             Map<String, Integer> header = findHeader(record);
             CSVRecord prettyHeader = findPrettyHeader(record);
             Iterator<String> iter = header.keySet().iterator();
-            while(iter.hasNext()){
-                String colName = iter.next();
-                if(record.isSet(colName) && !StringUtils.isBlank(record.get(colName))){
-                    if(!ReservedHeaderNames.isReserved(colName)){
-                        BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, record.get(colName), record.get(YEAR), prettyHeader.get(header.get(colName)));
-                        if(bv != null){
-                            surveyValues.add(bv);
+
+            try {
+                while (iter.hasNext()) {
+                    String colName = iter.next();
+                    if (record.isSet(colName) && !StringUtils.isBlank(record.get(colName))) {
+                        if (!ReservedHeaderNames.isReserved(colName)) {
+                            BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, record.get(colName), record.get(YEAR), prettyHeader.get(header.get(colName)));
+                            if (bv != null) {
+                                surveyValues.add(bv);
+                            }
                         }
                     }
                 }
+            } catch (Exception e) {
+                LOGGER.error("Error parsing record: " + e.getMessage());
+                LOGGER.error("Error parsing record " + record + " : ");
+                throw new RuntimeException(e);
             }
         }
         return surveyValues;

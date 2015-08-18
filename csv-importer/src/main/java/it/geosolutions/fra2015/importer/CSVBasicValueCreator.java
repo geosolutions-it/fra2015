@@ -44,7 +44,16 @@ public class CSVBasicValueCreator {
     
     public static BasicValue createBasicValue(String colName, String value, String year, String prettyHeaderCell){
         BasicValueCreator bvc = makeCreator(colName);
-        return bvc.create(colName, value, year, prettyHeaderCell);
+        try {
+            return bvc.create(colName, value, year, prettyHeaderCell);
+        } catch (RuntimeException e) {
+            if ((year.equals("2013") && colName.startsWith("16a_")) || // cells used sometimes for tmp totals
+                    (year.equals("2014") && colName.startsWith("16a_"))) {
+                return null; // all is fine
+            } else {
+                throw e;
+            }
+        }
     }
     
     /**
@@ -229,7 +238,7 @@ public class CSVBasicValueCreator {
                 if(specialYears.contains(year)){
                     return null;
                 }
-                throw new IllegalArgumentException("The passed year has no references in the map (mapYear16a)!!!");
+                throw new IllegalArgumentException("The passed year has no references in the map (mapYear16a)!!!: Year:" + year + " colname:" + colName);
             }
             int row = 0;
             String [] colNameParts = colName.split("_");
