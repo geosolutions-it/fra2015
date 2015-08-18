@@ -44,6 +44,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.geotools.TestData;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -90,7 +91,20 @@ public class SurveyCSV2surveyXMLsTest extends Assert {
         csvParser = new CSVParser("DZA", headers, records1, records2);
         csvParser.setPrettyHeader(csv1.getPrettyHeader(), csv2.getPrettyHeader());
     }
-    
+
+    @Test
+    public void testARG() {
+
+        final String COUNTRY = "ARG";
+
+        List<CSVRecord> records1 = csv1.groupCSVByCountry(COUNTRY);
+        List<CSVRecord> records2 = csv2.groupCSVByCountry(COUNTRY);
+
+        CSVParser parser = new CSVParser(COUNTRY, headers, records1, records2);
+        parser.setPrettyHeader(csv1.getPrettyHeader(), csv2.getPrettyHeader());
+        parser.toBasicValuesList();
+    }
+
     @Test
     public void questionExtraction() {
         Pattern pattern = Pattern.compile("^Q(\\d*)");
