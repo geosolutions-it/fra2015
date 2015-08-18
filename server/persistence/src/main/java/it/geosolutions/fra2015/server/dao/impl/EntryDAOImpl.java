@@ -9,6 +9,7 @@ import it.geosolutions.fra2015.server.model.survey.Entry;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.googlecode.genericdao.search.ISearch;
@@ -52,7 +53,9 @@ public class EntryDAOImpl extends BaseDAO<Entry, Long> implements EntryDAO{
          searchCriteria.addFilterEqual("variable", variable);
          List<Entry> entries = this.search(searchCriteria);
          if ( entries.size() > 0){
-             return entries.get(0);
+             Entry entry = entries.get(0);
+             Hibernate.initialize(entry.getEntryItems());
+             return entry;
          }
          return null;
     }
