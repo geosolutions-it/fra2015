@@ -109,95 +109,29 @@
 				margin-top="150pt">
 				<xsl:value-of select='//title' />
 			</fo:block>
-			<fo:block text-align="center" font-size="24pt" font-weight="bold">
-				Forestry Department
-			</fo:block>
-			<fo:block text-align="center" font-size="16pt">
-				Food and Agriculture Organization of the United Nations
-			</fo:block>
 		</fo:block-container>
 	</xsl:template>
 
 	<xsl:template name="genSecondPage">
 		<fo:block-container break-before='page'>
 			<fo:block />
-			<fo:block text-align="center" margin-top="20pt">
-				<fo:external-graphic src="url('img/faologo.png')"
-					width="40pt" height="40pt" content-width="scale-to-fit"
-					content-height="scale-to-fit" />
+			<fo:block text-align="justify" margin-top="50pt">
+				FAO, at the request of its member countries, regularly monitors the world´s
+				forests and their management and uses through the Global Forest Resources
+				Assessment (FRA). This country report is prepared as a contribution to the FAO
+				publication, the Global Forest Resources Assessment 2015 (FRA 2015).
 			</fo:block>
-			<fo:block text-align="center" font-weight="bold" margin-top="20pt">
-				The Forest Resources Assessment Programme
+			<fo:block text-align="justify">	 
+				The content and the structure are in accordance with the recommendations and
+				guidelines given by FAO in the document Guide for country reporting for FRA
+				2015 (http://www.fao.org/3/a-au190e.pdf). These reports were submitted to FAO
+				as official government documents.
 			</fo:block>
-			<fo:block text-align="justify" margin-top="20pt">
-				Sustainably managed forests provide essential goods and services and thus play
-				a vital part in sustainable development. Reliable and up-to-date
-				information on the state of forest resources is crucial to support
-				decision-making for investment and policy making in forestry and
-				sustainable development.
+			<fo:block text-align="justify" margin-top="20pt">	
+				The content and the views expressed in this report are the responsibility of
+				the entity submitting the report to FAO. FAO may not be held responsible for
+				the use which may be made of the information contained in this report.
 			</fo:block>
-			<fo:block text-align="justify" margin-top="20pt">
-				FAO, at the request of its member countries, regularly monitors the
-				world’s forests and their management and uses through the Forest
-				Resources Assessment Programme. This country report forms part of
-				the Global Forest Resources Assessment 2015 (FRA 2015). More
-				information on the FRA 2015 process, publications and online
-				database of results is available on the FRA web site
-				(www.fao.org/forestry/fra ).
-			</fo:block>
-			<fo:block text-align="justify" margin-top="20pt">
-				The Global Forest Resources Assessment process is coordinated by the
-				Forestry Department at FAO headquarters in Rome. The contact person
-				for matters related to FRA 2015 is:
-			</fo:block>
-			<fo:block margin-top="20pt">
-				Kenneth MacDicken
-			</fo:block>
-			<fo:block>
-				Senior Forestry Officer
-			</fo:block>
-			<fo:block>
-				Global Forest Assessment and Reporting
-			</fo:block>
-			<fo:block>
-				FAO Forestry Department
-			</fo:block>
-			<fo:block>
-				Viale delle Terme di Caracalla
-			</fo:block>
-			<fo:block>
-				Rome 00153, Italy
-			</fo:block>
-			<fo:block margin-top="20pt">
-				E-mail: Kenneth.MacDicken@fao.org
-			</fo:block>
-			<fo:block margin-top="20pt">
-				Readers can also use the following e-mail address: fra@fao.org
-			</fo:block>
-			<fo:block-container border="1pt solid black"
-				margin-top="20pt" padding-start="10pt" padding-end="10pt"
-				padding-before="10pt" padding-after="10pt">
-				<fo:block text-align="center" font-weight="bold">
-					DISCLAIMER
-				</fo:block>
-				<fo:block text-align="justify" margin-top="20pt">
-					The designations employed and the presentation of material in this
-					information product do not imply the expression of any opinion
-					whatsoever on the part of the Food and Agriculture Organization of
-					the United Nations concerning the legal status of any country,
-					territory, city or area or of its authorities, or concerning the
-					delimitation of its frontiers or boundaries.
-				</fo:block>
-				<fo:block text-align="justify" margin-top="20pt">
-					The Global Forest Resources Assessment Country Report Series is
-					designed to document and make available the information forming the
-					basis for the FRA reports. The Country Reports have been compiled
-					by officially nominated national correspondents in collaboration
-					with FAO staff. Prior to finalisation, these reports were subject
-					to review and revision by forestry authorities in the respective
-					countries.
-				</fo:block>
-			</fo:block-container>
 		</fo:block-container>
 	</xsl:template>
 
