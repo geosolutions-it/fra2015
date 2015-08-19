@@ -93,7 +93,13 @@ public class CSVParser {
                     String colName = iter.next();
                     if (record.isSet(colName) && !StringUtils.isBlank(record.get(colName))) {
                         if (!ReservedHeaderNames.isReserved(colName)) {
-                            BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, record.get(colName), record.get(YEAR), prettyHeader.get(header.get(colName)));
+                            String content = record.get(colName);
+                            if (content.contains(",")) {
+                                LOGGER.warn("Fixing decimal [" + content + "]");
+                                content = content.replace(',', '.');
+                            }
+
+                            BasicValue bv = CSVBasicValueCreator.createBasicValue(colName, content, record.get(YEAR), prettyHeader.get(header.get(colName)));
                             if (bv != null) {
                                 surveyValues.add(bv);
                             }
