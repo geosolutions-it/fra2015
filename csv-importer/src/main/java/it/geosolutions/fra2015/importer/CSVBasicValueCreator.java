@@ -76,6 +76,9 @@ public class CSVBasicValueCreator {
         if(colName.endsWith(A_BRACKET_SIX)){
             return csvBVC.new BracketCreator();
         }
+        else if(colName.split(COLNAME_SEPARATOR).length == 3 && colName.startsWith("4c_2")){
+            return csvBVC.new Entry4cCreator();
+        }
         else if(colName.split(COLNAME_SEPARATOR).length == 2 && colName.startsWith("3b_")){
             return csvBVC.new Entry3bCreator();
         }
@@ -284,6 +287,27 @@ public class CSVBasicValueCreator {
                 tiers = "Tier ";
             }
             return ReviewerUtils.buildBasicValue(extractQuestionName(prettyHeaderCell), tiers+value, colName+COLNAME_SEPARATOR, chooseType(value));
+        }
+    }
+    
+    public class Entry4cCreator extends BasicValueCreator{
+        @Override
+        public BasicValue createInternal(String colName, String value, String year, String prettyHeaderCell) {
+            
+            int yearNum = 0;
+            try{
+                yearNum = Integer.parseInt(year);
+            }
+            catch(Exception e){
+                throw new IllegalArgumentException("the year for a value in the table 4c is not a valid number!");
+            }
+            if(yearNum < 1990 || yearNum > 2011){
+                throw new IllegalArgumentException("the year for a value in the table 4c is not between 1990 and 2011");
+            }
+            int rowNumber = Math.abs(1990-yearNum);
+            int offset=(rowNumber<20)?2:3;
+            colName = colName.replace("4c_2_", "4c_"+(rowNumber+offset)+"_");
+            return ReviewerUtils.buildBasicValue(extractQuestionName(prettyHeaderCell), value, colName+COLNAME_SEPARATOR, chooseType(value));
         }
     }
     

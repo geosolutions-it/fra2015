@@ -240,6 +240,31 @@ public class SurveyCSV2surveyXMLsTest extends Assert {
     }
     
     @Test
+    public void basicValueEntry4cTest() {
+        BasicValueCreator creator = CSVBasicValueCreator.makeCreator("4c_2_2");
+        BasicValue bv1990 = creator.create("4c_2_2", "11", "1990", "Q4 Table4c");
+        
+        creator = CSVBasicValueCreator.makeCreator("4c_2_2");
+        BasicValue bv1991 = creator.create("4c_2_2", "22", "1991", "Q4 Table4c");
+        
+        creator = CSVBasicValueCreator.makeCreator("4c_2_2");
+        BasicValue bv2010 = creator.create("4c_2_2", "33", "2010", "Q4 Table4c");
+        
+        creator = CSVBasicValueCreator.makeCreator("4c_2_2");
+        BasicValue bv2011 = creator.create("4c_2_2", "44", "2011", "Q4 Table4c");
+        
+        assertEquals("11", bv1990.getContent());
+        assertEquals("22", bv1991.getContent());
+        assertEquals("33", bv2010.getContent());
+        assertEquals("44", bv2011.getContent());
+        
+        assertEquals("4c_2_2_", bv1990.getReference());
+        assertEquals("4c_3_2_", bv1991.getReference());
+        assertEquals("4c_23_2_", bv2010.getReference());
+        assertEquals("4c_24_2_", bv2011.getReference());
+    }
+    
+    @Test
     public void basicValueTwoYearsTest() {
         BasicValueCreator creator = CSVBasicValueCreator.makeCreator("7_4");
         BasicValue bv = creator.create("7_4", "34433", "2005", "Q1 dfsdf");
